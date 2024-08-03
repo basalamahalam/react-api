@@ -8,3 +8,8 @@ body {
 .navbar {
   background-color: #22668a;
 }
+
+.category-aktif {
+  background-color: #22668a;
+  color: white;
+}

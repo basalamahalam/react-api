@@ -14,12 +14,13 @@ export default class App extends Component {
 
     this.state = {
       menus: [],
+      categoryYangDipilih: "Makanan",
     };
   }
 
   componentDidMount() {
     axios
-      .get(API_URL + "products")
+      .get(API_URL + "products?category.nama=" + this.state.categoryYangDipilih)
       .then((res) => {
         // console.log(response);
         const menus = res.data;
@@ -30,15 +31,36 @@ export default class App extends Component {
         console.log(error);
       });
   }
+
+  changeCategory = (value) => {
+    this.setState({
+      categoryYangDipilih: value,
+      menus: [],
+    }),
+      axios
+        .get(API_URL + "products?category.nama=" + value)
+        .then((res) => {
+          // console.log(response);
+          const menus = res.data;
+          this.setState({ menus });
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
+  };
   render() {
-    const { menus } = this.state;
+    const { menus, categoryYangDipilih } = this.state;
     return (
       <div className="App">
         <NavbarComponents />
         <div className="mt-3">
           <Container fluid>
             <Row>
-              <ListCategories />
+              <ListCategories
+                changeCategory={this.changeCategory}
+                categoryYangDipilih={categoryYangDipilih}
+              />
               <Col>
                 <h4>
                   <strong>Daftar Produk</strong>

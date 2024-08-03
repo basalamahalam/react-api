@@ -3,6 +3,7 @@ import { Col, ListGroup } from "react-bootstrap";
 import axios from "axios";
 import { API_URL } from "../utils/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faUtensils,
   faCoffee,
@@ -44,6 +45,7 @@ export default class ListCategories extends Component {
   }
   render() {
     const { categories } = this.state;
+    const { changeCategory, categoryYangDipilih } = this.props;
     return (
       <Col md={2} mt="2">
         <h4>
@@ -53,7 +55,13 @@ export default class ListCategories extends Component {
         <ListGroup>
           {categories &&
             categories.map((category) => (
-              <ListGroup.Item key={category.id}>
+              <ListGroup.Item
+                key={category.id}
+                onClick={() => changeCategory(category.nama)}
+                className={
+                  categoryYangDipilih === category.nama && "category-aktif"
+                }
+              >
                 <h5>
                   <Icon nama={category.nama} />
                   {category.nama}
