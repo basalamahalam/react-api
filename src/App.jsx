@@ -7,6 +7,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import React, { Component } from "react";
 import { API_URL } from "./utils/constants";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default class App extends Component {
   constructor(props) {
@@ -49,6 +50,80 @@ export default class App extends Component {
           console.log(error);
         });
   };
+
+  masukKeranjang = (value) => {
+    axios
+      .get(API_URL + "keranjang?product.id" + value.id)
+      .then((res) => {
+        if (res.data.length === 0) {
+          const keranjang = {
+            jumlah: 1,
+            total_harga: value.harga,
+            product: value,
+          };
+
+          axios
+            .post(API_URL + "keranjangs", keranjang)
+            .then((res) => {
+              Swal.fire({
+                title: "Sukses Masuk Keranjang",
+                text: "Sukses Masuk Keranjang" + keranjang.product.nama,
+                icon: "success",
+                button: false,
+              });
+            })
+            .catch(function (error) {
+              // handle error
+              console.log(error);
+            });
+        } else {
+          const keranjang = {
+            jumlah: res.data[0].jumlah + 1,
+            total_harga: res.data.total_harga + value.harga,
+            product: value,
+          };
+        }
+        axios
+          .put(API_URL + "keranjangs/" + res.data[0].id + keranjang)
+          .then((res) => {
+            Swal.fire({
+              title: "Sukses Masuk Keranjang",
+              text: "Sukses Masuk Keranjang" + keranjang.product.nama,
+              icon: "success",
+              button: false,
+            });
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          });
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+
+    const keranjang = {
+      jumlah: 1,
+      total_harga: value.harga,
+      product: value,
+    };
+
+    axios
+      .post(API_URL + "keranjangs", keranjang)
+      .then((res) => {
+        Swal.fire({
+          title: "Sukses Masuk Keranjang",
+          text: "Sukses Masuk Keranjang" + keranjang.product.nama,
+          icon: "success",
+          button: false,
+        });
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+  };
   render() {
     const { menus, categoryYangDipilih } = this.state;
     return (
@@ -68,7 +143,13 @@ export default class App extends Component {
                 <hr />
                 <Row>
                   {menus &&
-                    menus.map((menu) => <Menus key={menu.id} menu={menu} />)}
+                    menus.map((menu) => (
+                      <Menus
+                        key={menu.id}
+                        menu={menu}
+                        masukKeranjang={this.masukKeranjang}
+                      />
+                    ))}
                 </Row>
               </Col>
               <Hasil />
