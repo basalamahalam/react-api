@@ -53,7 +53,7 @@ export default class App extends Component {
 
   masukKeranjang = (value) => {
     axios
-      .get(API_URL + "keranjang?product.id" + value.id)
+      .get(API_URL + "keranjangs?product.id=" + value.id)
       .then((res) => {
         if (res.data.length === 0) {
           const keranjang = {
@@ -61,7 +61,6 @@ export default class App extends Component {
             total_harga: value.harga,
             product: value,
           };
-
           axios
             .post(API_URL + "keranjangs", keranjang)
             .then((res) => {
@@ -69,7 +68,8 @@ export default class App extends Component {
                 title: "Sukses Masuk Keranjang",
                 text: "Sukses Masuk Keranjang" + keranjang.product.nama,
                 icon: "success",
-                button: false,
+                timer: 1000,
+                showConfirmButton: false,
               });
             })
             .catch(function (error) {
@@ -79,45 +79,26 @@ export default class App extends Component {
         } else {
           const keranjang = {
             jumlah: res.data[0].jumlah + 1,
-            total_harga: res.data.total_harga + value.harga,
+            total_harga: res.data[0].total_harga + value.harga,
             product: value,
           };
-        }
-        axios
-          .put(API_URL + "keranjangs/" + res.data[0].id + keranjang)
-          .then((res) => {
-            Swal.fire({
-              title: "Sukses Masuk Keranjang",
-              text: "Sukses Masuk Keranjang" + keranjang.product.nama,
-              icon: "success",
-              button: false,
+
+          axios
+            .put(API_URL + "keranjangs/" + res.data[0].id, keranjang)
+            .then((res) => {
+              Swal.fire({
+                title: "Sukses Masuk Keranjang",
+                text: "Sukses Masuk Keranjang" + keranjang.product.nama,
+                icon: "success",
+                timer: 1000,
+                showConfirmButton: false,
+              });
+            })
+            .catch(function (error) {
+              // handle error
+              console.log(error);
             });
-          })
-          .catch(function (error) {
-            // handle error
-            console.log(error);
-          });
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      });
-
-    const keranjang = {
-      jumlah: 1,
-      total_harga: value.harga,
-      product: value,
-    };
-
-    axios
-      .post(API_URL + "keranjangs", keranjang)
-      .then((res) => {
-        Swal.fire({
-          title: "Sukses Masuk Keranjang",
-          text: "Sukses Masuk Keranjang" + keranjang.product.nama,
-          icon: "success",
-          button: false,
-        });
+        }
       })
       .catch(function (error) {
         // handle error
