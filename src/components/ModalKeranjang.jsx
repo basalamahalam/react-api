@@ -3,19 +3,28 @@ import { Button, Modal, Form } from "react-bootstrap";
 import { numberWithComas } from "../utils/utils";
 
 const ModalKeranjang = ({ showModal, handleClose, keranjangDetail }) => {
+  // Cek apakah keranjangDetail dan keranjangDetail.product ada
+  const hasKeranjangDetail = keranjangDetail && keranjangDetail.product;
+
   return (
     <Modal show={showModal} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>
-          {keranjangDetail ? keranjangDetail.product.nama : "kosong"}
-          <strong>
-            {" "}
-            (Rp. {numberWithComas(keranjangDetail.product.harga)})
-          </strong>
+          {hasKeranjangDetail ? (
+            <>
+              {keranjangDetail.product.nama}
+              <strong>
+                {" "}
+                (Rp. {numberWithComas(keranjangDetail.product.harga)})
+              </strong>
+            </>
+          ) : (
+            "kosong"
+          )}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {keranjangDetail ? (
+        {hasKeranjangDetail ? (
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Email address</Form.Label>
