@@ -14,6 +14,7 @@ const ModalKeranjang = ({
   kurang,
   changeHandler,
   handleSubmit,
+  totalHarga,
 }) => {
   const hasKeranjangDetail = keranjangDetail && keranjangDetail.product;
 
@@ -40,9 +41,7 @@ const ModalKeranjang = ({
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Total Harga</Form.Label>
               <p>
-                <strong>
-                  Rp. {numberWithComas(keranjangDetail.total_harga)}
-                </strong>
+                <strong>Rp. {numberWithComas(totalHarga)}</strong>
               </p>
             </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
