@@ -10,8 +10,11 @@ const ModalKeranjang = ({
   keranjangDetail,
   jumlah,
   keterangan,
+  tambah,
+  kurang,
+  changeHandler,
+  handleSubmit,
 }) => {
-  // Cek apakah keranjangDetail dan keranjangDetail.product ada
   const hasKeranjangDetail = keranjangDetail && keranjangDetail.product;
 
   return (
@@ -33,7 +36,7 @@ const ModalKeranjang = ({
       </Modal.Header>
       <Modal.Body>
         {hasKeranjangDetail ? (
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Total Harga</Form.Label>
               <p>
@@ -45,11 +48,21 @@ const ModalKeranjang = ({
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Jumlah :</Form.Label>
               <br />
-              <Button variant="primary" size="sm" className="me-2">
+              <Button
+                variant="primary"
+                size="sm"
+                className="me-2"
+                onClick={tambah}
+              >
                 <FontAwesomeIcon icon={faPlus} />
               </Button>
               <strong>{jumlah}</strong>
-              <Button variant="primary" size="sm" className="ms-2">
+              <Button
+                variant="primary"
+                size="sm"
+                className="ms-2"
+                onClick={kurang}
+              >
                 <FontAwesomeIcon icon={faMinus} />
               </Button>
             </Form.Group>
@@ -64,6 +77,7 @@ const ModalKeranjang = ({
                 name="keterangan"
                 placeholder="Contoh: Pedas, Nasi Setengah, dst"
                 value={keterangan}
+                onChange={changeHandler}
               />
             </Form.Group>
             <Button variant="primary" type="submit">
