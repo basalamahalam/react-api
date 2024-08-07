@@ -15,6 +15,7 @@ const ModalKeranjang = ({
   changeHandler,
   handleSubmit,
   totalHarga,
+  hapusPesanan,
 }) => {
   const hasKeranjangDetail = keranjangDetail && keranjangDetail.product;
 
@@ -51,18 +52,18 @@ const ModalKeranjang = ({
                 variant="primary"
                 size="sm"
                 className="me-2"
-                onClick={tambah}
+                onClick={kurang}
               >
-                <FontAwesomeIcon icon={faPlus} />
+                <FontAwesomeIcon icon={faMinus} />
               </Button>
               <strong>{jumlah}</strong>
               <Button
                 variant="primary"
                 size="sm"
                 className="ms-2"
-                onClick={kurang}
+                onClick={tambah}
               >
-                <FontAwesomeIcon icon={faMinus} />
+                <FontAwesomeIcon icon={faPlus} />
               </Button>
             </Form.Group>
             <Form.Group
@@ -88,7 +89,12 @@ const ModalKeranjang = ({
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="danger" onClick={handleClose}>
+        <Button
+          variant="danger"
+          onClick={() => {
+            hapusPesanan(keranjangDetail.id);
+          }}
+        >
           <FontAwesomeIcon icon={faTrash} /> Hapus Pesanan
         </Button>
       </Modal.Footer>

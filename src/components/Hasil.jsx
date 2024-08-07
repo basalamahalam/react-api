@@ -3,6 +3,9 @@ import { Badge, Col, ListGroup, Row } from "react-bootstrap";
 import { numberWithComas } from "../utils/utils";
 import TotalBayar from "./TotalBayar";
 import ModalKeranjang from "./ModalKeranjang";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { API_URL } from "../utils/constants";
 
 export default class Hasil extends Component {
   constructor(props) {
@@ -60,7 +63,50 @@ export default class Hasil extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log(this.state.keterangan);
+    this.handleClose();
+
+    const data = {
+      jumlah: this.state.jumlah,
+      total_harga: this.state.totalHarga,
+      product: this.state.keranjangDetail.product,
+      keterangan: this.state.keterangan,
+    };
+    axios
+      .put(API_URL + "keranjangs/" + this.state.keranjangDetail.id, data)
+      .then((res) => {
+        Swal.fire({
+          title: "Update Pesanan",
+          text: "Sukses Update Pesanan" + data.product.nama,
+          icon: "success",
+          timer: 1000,
+          showConfirmButton: false,
+        });
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+  };
+
+  hapusPesanan = (id) => {
+    this.handleClose();
+
+    axios
+      .delete(API_URL + "keranjangs/" + id)
+      .then((res) => {
+        Swal.fire({
+          title: "Hapus Pesanan",
+          text:
+            "Sukses Hapus Pesanan" + this.state.keranjangDetail.product.nama,
+          icon: "error",
+          timer: 1000,
+          showConfirmButton: false,
+        });
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
   };
 
   render() {
@@ -105,6 +151,7 @@ export default class Hasil extends Component {
               kurang={this.kurang}
               changeHandler={this.changeHandler}
               handleSubmit={this.handleSubmit}
+              hapusPesanan={this.hapusPesanan}
             />
           </ListGroup>
         )}
